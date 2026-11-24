@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OukeDev · 独立开发者</title>
+  <meta name="description" content="独立开发者，用 Kotlin Multiplatform 与 Compose 打造跨平台 App。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f6f6f5;
+      --surface: #ffffff;
+      --ink: #111111;
+      --ink-2: #4a4a4a;
+      --ink-3: #8a8a8a;
+      --line: #ececea;
+      --accent: #1a7cf5;
+      --accent-soft: #e3effe;
+      --green: #2f9e44;
+      --radius: 999px;
+      --shadow: 0 1px 2px rgba(0,0,0,.04), 0 12px 40px rgba(0,0,0,.06);
+      --font: "Inter", -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ---------- 导航 ---------- */
+    .nav-wrap { position: sticky; top: 16px; z-index: 50; padding: 0 16px; }
+    .nav {
+      max-width: 1120px; margin: 16px auto 0;
+      display: flex; align-items: center; gap: 32px;
+      background: rgba(255,255,255,.85);
+      backdrop-filter: saturate(180%) blur(12px);
+      -webkit-backdrop-filter: saturate(180%) blur(12px);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 10px 10px 10px 22px;
+    }
+    .logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 20px; letter-spacing: -.02em; }
+    .logo-mark {
+      width: 28px; height: 28px; border-radius: 8px; background: var(--ink); color: #fff;
+      display: grid; place-items: center; font-family: var(--mono); font-size: 13px; font-weight: 500;
+    }
+    .nav-links { display: flex; gap: 28px; font-size: 15px; color: var(--ink); }
+    .nav-links a { opacity: .85; transition: opacity .15s; }
+    .nav-links a:hover { opacity: 1; }
+    .nav-right { margin-left: auto; display: flex; align-items: center; gap: 20px; font-size: 15px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--ink); color: #fff; border-radius: var(--radius);
+      padding: 12px 22px; font-size: 15px; font-weight: 500;
+      box-shadow: 0 0 0 3px rgba(17,17,17,.08);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 0 0 4px rgba(17,17,17,.12); }
+    .btn-ghost { background: transparent; color: var(--ink); box-shadow: none; padding: 12px 6px; }
+    .btn-ghost:hover { box-shadow: none; text-decoration: underline; }
+
+    /* ---------- Hero ---------- */
+    .hero { position: relative; text-align: center; padding: 120px 16px 72px; }
+    .badge {
+      display: inline-block; background: var(--accent-soft); color: var(--accent);
+      border-radius: var(--radius); padding: 7px 16px; font-size: 15px; font-weight: 500;
+    }
+    .badge .dot {
+      display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green); margin-right: 8px; vertical-align: middle;
+      box-shadow: 0 0 0 3px rgba(47,158,68,.18);
+    }
+    h1 {
+      margin: 28px auto 24px; max-width: 920px;
+      font-size: clamp(40px, 7vw, 80px); line-height: 1.08; letter-spacing: -.035em; font-weight: 700;
+    }
+    .lead { max-width: 600px; margin: 0 auto 32px; color: var(--ink-2); font-size: 18px; line-height: 1.7; }
+    .checks { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 34px; margin-top: 56px; }
+    .check { display: inline-flex; align-items: center; gap: 10px; color: var(--accent); font-size: 17px; font-weight: 500; }
+    .check svg { flex: none; }
+
+    /* ---------- 装饰物（纯 CSS/SVG） ---------- */
+    .deco { position: absolute; pointer-events: none; text-align: left; z-index: 0; }
+    .hero > *:not(.deco) { position: relative; z-index: 1; }
+
+    /* 机械键帽 */
+    .deco-keys { left: 4%; top: 110px; display: grid; grid-template-columns: repeat(2, 64px); gap: 8px; transform: rotate(-14deg); }
+    .key {
+      width: 64px; height: 64px; border-radius: 12px; background: linear-gradient(180deg, #fff, #ececea);
+      border: 1px solid #dcdcd8; box-shadow: 0 6px 0 #d2d2cd, 0 14px 24px rgba(0,0,0,.10);
+      display: grid; place-items: center; font-family: var(--mono); font-size: 18px; color: #555;
+    }
+    .key.dark { background: linear-gradient(180deg, #2b2b2b, #161616); border-color: #000; color: #eee; box-shadow: 0 6px 0 #000, 0 14px 24px rgba(0,0,0,.18); }
+    .key.accent { background: linear-gradient(180deg, #3b8bff, #1a6ae0); border-color: #155ac0; color: #fff; box-shadow: 0 6px 0 #1250aa, 0 14px 24px rgba(26,124,245,.25); }
+    .key.wide { grid-column: span 2; width: auto; }
+
+    /* 窗口通用 */
+    .win { border-radius: 14px; overflow: hidden; font-family: var(--mono); font-size: 12.5px; line-height: 1.7; box-shadow: 0 30px 60px rgba(0,0,0,.16), 0 2px 6px rgba(0,0,0,.06); }
+    .win-bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; }
+    .win-bar i { width: 10px; height: 10px; border-radius: 50%; display: block; }
+    .win-bar i:nth-child(1) { background: #ff5f57; } .win-bar i:nth-child(2) { background: #febc2e; } .win-bar i:nth-child(3) { background: #28c840; }
+    .win-bar span { margin-left: 10px; font-size: 11px; opacity: .55; }
+    .win pre { padding: 6px 18px 18px; white-space: pre; font: inherit; }
+
+    /* 代码编辑器（右上，部分出屏） */
+    .deco-editor { right: -70px; top: 70px; width: 360px; background: #1e1f22; color: #bcbec4; transform: rotate(9deg); }
+    .deco-editor .win-bar { background: #2b2d30; }
+    .kw { color: #cf8e6d; } .an { color: #b3ae60; } .fn { color: #56a8f5; } .st { color: #6aab73; } .cm { color: #7a7e85; font-style: italic; } .nu { color: #2aacb8; }
+
+    /* 终端（左中） */
+    .deco-term { left: -70px; top: 540px; width: 300px; background: #fbfbfa; color: #333; border: 1px solid var(--line); transform: rotate(7deg); }
+    .deco-term .win-bar { background: #f0f0ee; border-bottom: 1px solid var(--line); }
+    .deco-term .p { color: var(--accent); } .deco-term .ok { color: var(--green); font-weight: 500; } .deco-term .dim { color: #999; }
+
+    /* Git 分支图（右下） */
+    .deco-git {
+      right: -40px; top: 560px; width: 280px; white-space: nowrap; z-index: 2; background: #fff; border: 1px solid var(--line); border-radius: 14px;
+      padding: 16px 18px; transform: rotate(-8deg); box-shadow: 0 24px 48px rgba(0,0,0,.10);
+      font-family: var(--mono); font-size: 12px; color: #444;
+    }
+    .deco-git .gl { display: flex; align-items: center; gap: 10px; height: 30px; }
+    .deco-git .h { color: #aaa; }
+    .deco-git .br { background: var(--accent-soft); color: var(--accent); border-radius: 4px; padding: 0 6px; font-size: 11px; }
+
+    /* 左下：PR 合并徽章 */
+    .deco-pr {
+      left: 3%; top: 830px; display: flex; z-index: 2; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--line);
+      border-radius: 999px; padding: 10px 16px 10px 10px; transform: rotate(-6deg); box-shadow: 0 16px 32px rgba(0,0,0,.08);
+      font-size: 14px; font-weight: 500;
+    }
+    .deco-pr b { width: 28px; height: 28px; border-radius: 50%; background: #8250df; display: grid; place-items: center; }
+    .deco-pr small { color: var(--ink-3); font-family: var(--mono); font-weight: 400; }
+
+    /* ---------- App 缩略图展示（数据驱动，见底部 APPS） ----------
+       ≤ 5 个（手机端 ≤ 3 个）：扇形排列；更多：自动无限滚动，悬停暂停 */
+    .apps { margin: 72px auto 0; padding: 0 16px; }
+    .apps-track { --gap: 28px; display: flex; justify-content: center; align-items: flex-end; gap: var(--gap); }
+    .app {
+      display: flex; flex-direction: column; align-items: center; gap: 14px; flex: none;
+      rotate: var(--r, 0deg); translate: 0 var(--y, 0px);
+      transition: rotate .3s, translate .3s;
+    }
+    .app:hover { rotate: 0deg; translate: 0 -10px; }
+    .phone {
+      width: var(--w, 150px); aspect-ratio: 9 / 19; border-radius: 26px; padding: 6px;
+      background: #111; box-shadow: 0 24px 48px rgba(0,0,0,.14);
+    }
+    .screen { height: 100%; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: #fff; }
+    .screen img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .screen .ic { width: 52px; height: 52px; border-radius: 14px; background: rgba(255,255,255,.95); display: grid; place-items: center; font-weight: 700; font-size: 22px; overflow: hidden; }
+    .screen .ic img { width: 100%; height: 100%; object-fit: cover; }
+    .screen .bar { width: 60%; height: 6px; border-radius: 3px; background: rgba(255,255,255,.55); }
+    .screen .bar.s { width: 40%; background: rgba(255,255,255,.35); }
+    .app-name { font-size: 15px; font-weight: 600; white-space: nowrap; }
+
+    /* 入场：依次浮现（animation 用 transform，扇形用 rotate/translate，互不冲突） */
+    .apps.fan .app { animation: rise .7s cubic-bezier(.2,.8,.2,1) backwards; animation-delay: calc(var(--i) * 90ms + 150ms); }
+    @keyframes rise { from { opacity: 0; transform: translateY(60px) scale(.92); } }
+
+    /* 无限滚动 */
+    .apps.marquee {
+      max-width: 940px; padding: 30px 0; overflow: hidden;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+              mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    }
+    .apps.marquee .apps-track { justify-content: flex-start; width: max-content; animation: marquee var(--dur, 40s) linear infinite; }
+    .apps.marquee:hover .apps-track { animation-play-state: paused; }
+    @keyframes marquee { to { transform: translateX(calc(-50% - var(--gap) / 2)); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .apps.fan .app { animation: none; }
+      .apps.marquee { overflow-x: auto; }
+      .apps.marquee .apps-track { animation: none; }
+    }
+    .tag { display: inline-block; font-family: var(--mono); font-size: 12px; background: #f2f2f0; border-radius: 6px; padding: 2px 8px; }
+    .tag.ok { background: #e7f6ea; color: var(--green); }
+
+    /* ---------- 通用区块 ---------- */
+    section.block { max-width: 1120px; margin: 0 auto; padding: 120px 16px 0; }
+    .eyebrow { font-family: var(--mono); font-size: 13px; color: var(--ink-3); }
+    h2 { font-size: clamp(30px, 4.4vw, 48px); letter-spacing: -.03em; line-height: 1.15; margin: 12px 0 40px; font-weight: 700; }
+
+    /* ---------- 作品详情：粘性滚动叙事（Scrollytelling） ----------
+       文字按「介绍 → 第 1 页 → 第 2 页 …」逐段滚过；另一侧手机 sticky 固定，屏幕随当前段切换 */
+    .work-head { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: end; margin-bottom: 8px; }
+    .work-head h2 { margin-bottom: 0; }
+    .work-head p { color: var(--ink-2); font-size: 17px; line-height: 1.7; }
+    .feature { --c: #111; padding: 40px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 90px; }
+    .feature:last-child { border-bottom: 0; }
+    .story { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
+    .feature.flip .story-media { order: -1; }
+    .story > * { min-width: 0; }
+
+    /* 文字段 */
+    .step { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; padding: 40px 0; opacity: .25; transition: opacity .5s ease; }
+    .step.on { opacity: 1; }
+    .feat-no { font-family: var(--mono); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--c); margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+    .feat-no i { width: 22px; height: 22px; border-radius: 6px; background: var(--c); display: grid; place-items: center; color: #fff; font-style: normal; font-size: 11px; letter-spacing: 0; overflow: hidden; }
+    .feat-no i img { width: 100%; height: 100%; object-fit: cover; }
+    .feature h3 { font-size: clamp(28px, 3.6vw, 44px); line-height: 1.15; letter-spacing: -.035em; text-wrap: balance; }
+    .feat-desc { color: var(--ink-2); font-size: 17px; line-height: 1.75; margin-top: 20px; }
+    .feat-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); }
+    .feat-meta dt { font-size: 13px; color: var(--ink-3); margin-bottom: 6px; }
+    .feat-meta dd { font-size: 16px; font-weight: 600; }
+    .feat-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+    .btn-line { display: inline-flex; align-items: center; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 12px 22px; font-size: 15px; font-weight: 500; transition: border-color .15s; }
+    .btn-line:hover { border-color: var(--ink-3); }
+    .step-no { font-family: var(--mono); font-size: 13px; color: var(--c); }
+    .step-no span { color: var(--ink-3); }
+    .step h4 { font-size: clamp(24px, 2.6vw, 34px); line-height: 1.2; letter-spacing: -.03em; margin-top: 12px; }
+    .step p { color: var(--ink-2); font-size: 17px; line-height: 1.75; margin-top: 14px; max-width: 460px; }
+
+    /* 固定的手机 */
+    .story-media { position: sticky; top: 80px; height: calc(100vh - 80px); display: flex; align-items: center; }
+    .feat-media {
+      position: relative; width: 100%; height: min(640px, calc(100vh - 140px));
+      display: flex; align-items: center; justify-content: center; border-radius: 28px; border: 1px solid var(--line);
+      background: radial-gradient(120% 80% at 50% 0%, color-mix(in srgb, var(--c) 14%, transparent), transparent 70%), var(--surface);
+      box-shadow: var(--shadow); overflow: hidden;
+    }
+    .feat-phone { position: relative; height: 86%; aspect-ratio: 9 / 19; border-radius: 40px; background: #151515; box-shadow: 0 30px 60px rgba(0,0,0,.18); }
+    .feat-phone .layer { position: absolute; inset: 9px; opacity: 0; transform: translateY(26px) scale(.98); transition: opacity .55s ease, transform .55s cubic-bezier(.2,.8,.2,1); }
+    .feat-phone .layer.on { opacity: 1; transform: none; }
+    .feat-phone .screen { border-radius: 32px; gap: 14px; }
+    .feat-phone .screen .ic { width: 72px; height: 72px; border-radius: 20px; font-size: 30px; }
+    .dots { position: absolute; right: 22px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 8px; }
+    .dots button { width: 8px; height: 8px; border-radius: 4px; border: 0; padding: 0; background: var(--ink-3); opacity: .35; cursor: pointer; transition: height .3s, opacity .3s, background .3s; }
+    .dots button.on { height: 24px; opacity: 1; background: var(--c); }
+
+    /* 占位页面（没有截图时按页序生成不同的示意界面） */
+    .ps { justify-content: flex-start; align-items: stretch; padding: 44px 14px 14px; gap: 10px; color: var(--ink); background: color-mix(in srgb, var(--c) 7%, #fff) !important; }
+    .ps-title { font-size: 15px; font-weight: 700; color: var(--c); padding: 0 2px 4px; }
+    .ps-card { background: #fff; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,.06); min-height: 44px; }
+    .ps-card.hero { min-height: 120px; background: var(--c); opacity: .9; }
+    .ps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .ps-grid .ps-card { min-height: 78px; }
+    .ps-row { display: flex; align-items: center; gap: 10px; background: #fff; border-radius: 12px; padding: 10px; }
+    .ps-row b { width: 28px; height: 28px; border-radius: 8px; background: color-mix(in srgb, var(--c) 25%, #fff); flex: none; }
+    .ps-row i { height: 6px; border-radius: 3px; background: #e6e6e3; flex: 1; }
+
+    /* 分页容器：电脑端 display: contents，不影响竖向叙事；手机端变成横向滑动卡片 */
+    .steps-rail { display: contents; }
+    .step-phone, .rail-dots { display: none; }
+    @media (max-width: 960px) {
+      .story { grid-template-columns: 1fr; gap: 0; }
+      .story-media { display: none; }
+      .step { min-height: 0; opacity: 1; padding: 32px 0 8px; }
+      .step-phone { display: block; width: 180px; aspect-ratio: 9 / 19; margin: 28px auto 0; padding: 6px; border-radius: 30px; background: #151515; box-shadow: 0 20px 40px rgba(0,0,0,.14); }
+      .step-phone .screen { border-radius: 24px; }
+      .work-head { grid-template-columns: 1fr; gap: 16px; }
+
+      .steps-rail {
+        display: flex; align-items: flex-start; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+        margin: 8px -16px 0; padding: 4px 16px 12px; scrollbar-width: none;
+      }
+      .steps-rail::-webkit-scrollbar { display: none; }
+      .steps-rail .step {
+        flex: 0 0 min(280px, 78vw); scroll-snap-align: center; padding: 20px; border-radius: 22px;
+        background: var(--surface); border: 1px solid var(--line); box-shadow: 0 1px 2px rgba(0,0,0,.03);
+        display: flex; flex-direction: column; justify-content: flex-start;
+      }
+      .steps-rail .step-phone { order: -1; width: 150px; margin: 0 auto 18px; }
+      .steps-rail .step h4 { font-size: 20px; margin-top: 8px; }
+      .steps-rail .step p { font-size: 15px; line-height: 1.65; margin-top: 8px; }
+      .rail-dots { display: flex; justify-content: center; gap: 6px; padding: 6px 0 24px; }
+      .rail-dots i { width: 6px; height: 6px; border-radius: 3px; background: var(--ink-3); opacity: .35; transition: width .3s, opacity .3s, background .3s; }
+      .rail-dots i.on { width: 18px; opacity: 1; background: var(--c); }
+    }
+
+    /* 介绍段进场：依次上浮 */
+    .js .feature .rv { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); transition-delay: calc(var(--d, 0) * 80ms); }
+    .js .feature.in .rv { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .js .feature .rv { opacity: 1; transform: none; transition: none; }
+      .step, .feat-phone .layer, .dots button { transition: none; }
+    }
+
+    .split { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: start; }
+    .about p { color: var(--ink-2); font-size: 17px; line-height: 1.8; margin-bottom: 16px; }
+    .stack-list { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; }
+    .stack-list div { display: flex; justify-content: space-between; padding: 18px 24px; font-size: 15px; }
+    .stack-list div + div { border-top: 1px solid var(--line); }
+    .stack-list span:last-child { color: var(--ink-3); font-family: var(--mono); font-size: 13px; }
+
+    .writing a { display: flex; justify-content: space-between; gap: 16px; padding: 22px 0; border-top: 1px solid var(--line); font-size: 18px; }
+    .writing a:last-child { border-bottom: 1px solid var(--line); }
+    .writing a:hover .t { text-decoration: underline; }
+    .writing time { color: var(--ink-3); font-family: var(--mono); font-size: 13px; white-space: nowrap; padding-top: 4px; }
+
+    .cta {
+      max-width: 1120px; margin: 120px auto 0; padding: 72px 16px; text-align: center;
+      background: var(--surface); border: 1px solid var(--line); border-radius: 28px;
+    }
+    .cta p { color: var(--ink-2); margin: -20px 0 28px; font-size: 17px; }
+    footer { max-width: 1120px; margin: 0 auto; padding: 40px 16px 56px; display: flex; justify-content: space-between; color: var(--ink-3); font-size: 14px; }
+    footer nav { display: flex; gap: 20px; }
+
+    /* ---------- 响应式 ---------- */
+    /* 中小屏：装饰缩小并贴边，只露出一部分，不挡正文 */
+    @media (max-width: 1180px) {
+      .deco { scale: .7; opacity: .9; z-index: 0 !important; }
+      .deco-keys { left: -10px; top: 100px; transform-origin: top left; }
+      .deco-editor { right: -150px; top: 70px; transform-origin: top right; }
+      .deco-term { left: -140px; top: 470px; }
+      .deco-git { right: -110px; top: 500px; }
+      .deco-pr { display: none; }
+    }
+    @media (max-width: 720px) {
+      .deco { scale: .5; }
+      .deco-keys { left: -46px; top: 56px; }
+      .deco-editor { right: -150px; top: 10px; }
+      .deco-term { left: -150px; top: 330px; }
+      .deco-git { right: -125px; top: 350px; }
+    }
+    @media (max-width: 960px) {
+      .split { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px) {
+      .nav-links, .nav-right .btn-ghost { display: none; }
+      .nav { gap: 12px; }
+      .hero { padding-top: 72px; }
+      .lead br { display: none; }
+      .feat-meta { grid-template-columns: 1fr 1fr; }
+      .apps-track { --gap: 16px; }
+      .phone { --w: 96px; border-radius: 18px; padding: 4px; }
+      .app { --w: 96px; }
+      .screen { border-radius: 14px; }
+      .screen .ic { width: 36px; height: 36px; border-radius: 10px; font-size: 16px; }
+      .app-name { font-size: 13px; }
+      footer { flex-direction: column; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="nav-wrap">
+    <header class="nav">
+      <a class="logo" href="#"><span class="logo-mark">&lt;/&gt;</span>OukeDev</a>
+      <nav class="nav-links">
+        <a href="#work">作品</a>
+        <a href="#about">关于</a>
+        <a href="#writing">文章</a>
+        <a href="#contact">联系</a>
+      </nav>
+      <div class="nav-right">
+        <a class="btn-ghost" href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="#contact">合作联系</a>
+      </div>
+    </header>
+  </div>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <!-- 左上：机械键帽 -->
+      <div class="deco deco-keys" aria-hidden="true">
+        <span class="key dark">⌘</span><span class="key">K</span>
+        <span class="key">⌥</span><span class="key accent">⏎</span>
+        <span class="key wide">git push</span>
+      </div>
+
+      <!-- 右上：Compose 代码编辑器 -->
+      <div class="deco deco-editor win" aria-hidden="true">
+        <div class="win-bar"><i></i><i></i><i></i><span>HomeScreen.kt</span></div>
+<pre><span class="an">@Composable</span>
+<span class="kw">fun</span> <span class="fn">HomeScreen</span>(state: <span class="fn">UiState</span>) {
+  <span class="fn">Column</span>(Modifier.<span class="fn">padding</span>(<span class="nu">16</span>.dp)) {
+    <span class="fn">Text</span>(<span class="st">"Hello, KMP 👋"</span>)
+    <span class="kw">if</span> (state.isPro) {
+      <span class="fn">ProBadge</span>()
+    } <span class="kw">else</span> {
+      <span class="fn">Paywall</span>(onBuy = ::<span class="fn">purchase</span>)
+    }
+  }
+}
+<span class="cm">// commonMain · Android + iOS</span></pre>
+      </div>
+
+      <!-- 左中：终端 -->
+      <div class="deco deco-term win" aria-hidden="true">
+        <div class="win-bar"><i></i><i></i><i></i><span>zsh — ~/app</span></div>
+<pre><span class="p">$</span> ./gradlew assembleRelease
+<span class="dim">&gt; Task :shared:compileKotlin</span>
+<span class="dim">&gt; Task :androidApp:bundle</span>
+<span class="ok">BUILD SUCCESSFUL</span> in 42s
+<span class="p">$</span> xcodebuild -scheme iosApp
+<span class="ok">** ARCHIVE SUCCEEDED **</span>
+<span class="p">$</span> <span style="background:#333;color:#333">_</span></pre>
+      </div>
+
+      <!-- 右下：Git 分支图 -->
+      <div class="deco deco-git" aria-hidden="true">
+        <svg width="40" height="150" viewBox="0 0 40 150" style="position:absolute;left:14px;top:16px" fill="none">
+          <path d="M10 15 V135" stroke="#1a7cf5" stroke-width="2.5"/>
+          <path d="M10 105 C10 85 28 85 28 65 V45 C28 25 10 25 10 15" stroke="#8250df" stroke-width="2.5"/>
+          <circle cx="10" cy="15" r="5" fill="#fff" stroke="#1a7cf5" stroke-width="2.5"/>
+          <circle cx="28" cy="45" r="5" fill="#fff" stroke="#8250df" stroke-width="2.5"/>
+          <circle cx="28" cy="75" r="5" fill="#fff" stroke="#8250df" stroke-width="2.5"/>
+          <circle cx="10" cy="105" r="5" fill="#fff" stroke="#1a7cf5" stroke-width="2.5"/>
+          <circle cx="10" cy="135" r="5" fill="#fff" stroke="#1a7cf5" stroke-width="2.5"/>
+        </svg>
+        <div style="padding-left:44px">
+          <div class="gl"><span class="h">a1f9c2</span> release v2.0 <span class="br">main</span></div>
+          <div class="gl"><span class="h">7be014</span> feat: paywall</div>
+          <div class="gl"><span class="h">c33d8a</span> fix: iOS restore</div>
+          <div class="gl"><span class="h">90ae71</span> chore: bump deps</div>
+          <div class="gl"><span class="h">4d2b6f</span> init commonMain</div>
+        </div>
+      </div>
+
+      <!-- 左下：PR 合并 -->
+      <div class="deco deco-pr" aria-hidden="true">
+        <b><svg width="14" height="14" viewBox="0 0 16 16" fill="#fff"><path d="M5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm0 2.122a2.25 2.25 0 1 0-1.5 0v5.256a2.25 2.25 0 1 0 1.5 0V9.5A2.5 2.5 0 0 0 7.5 12h2.128a2.25 2.25 0 1 0 0-1.5H7.5a1 1 0 0 1-1-1V5.372Z"/></svg></b>
+        Merged #128 <small>+342 −87</small>
+      </div>
+
+      <span class="badge"><span class="dot"></span>接受合作中</span>
+      <h1>做人们每天打开的 App</h1>
+      <p class="lead">独立开发者 · Kotlin Multiplatform</p>
+      <a class="btn" href="#work">看看作品 →</a>
+
+      <!-- App 缩略图：由底部脚本按 APPS 数据渲染 -->
+      <div class="apps" id="apps" aria-label="我的 App"></div>
+    </section>
+
+    <!-- 作品：由底部脚本按 APPS 数据渲染 -->
+    <section class="block" id="work">
+      <div class="work-head">
+        <div>
+          <div class="eyebrow">// 01 · 作品</div>
+          <h2>做过的 App</h2>
+        </div>
+        <p>每一个都从自己的需求出发，独立完成设计、开发到上架。</p>
+      </div>
+      <div id="app-details"></div>
+    </section>
+
+    <!-- 关于 -->
+    <section class="block" id="about">
+      <div class="eyebrow">// 02 · 关于</div>
+      <h2>你好，我是 OukeDev</h2>
+      <div class="split">
+        <div class="about">
+          <p>我专注于移动端产品，喜欢把一个模糊的想法打磨成能上架、能赚钱、用户愿意留下来的 App。</p>
+          <p>比起堆功能，我更在意细节：启动速度、手势手感、付费流程是否顺滑，以及上架审核能否一次通过。</p>
+          <p>这里记录我做过的东西、踩过的坑，以及一些正在进行的实验。</p>
+        </div>
+        <div class="stack-list">
+          <div><span>语言</span><span>Kotlin · Swift</span></div>
+          <div><span>UI</span><span>Compose Multiplatform</span></div>
+          <div><span>架构</span><span>KMP · MVI</span></div>
+          <div><span>变现</span><span>RevenueCat · IAP</span></div>
+          <div><span>工具</span><span>Android Studio · Xcode</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 文章 -->
+    <section class="block" id="writing">
+      <div class="eyebrow">// 03 · 文章</div>
+      <h2>最近在写</h2>
+      <div class="writing">
+        <a href="#"><span class="t">用 KMP 一套代码接入 Android 与 iOS 内购</span><time>2026-11</time></a>
+        <a href="#"><span class="t">Compose Multiplatform 在 iOS 上的性能调优笔记</span><time>2026-10</time></a>
+        <a href="#"><span class="t">独立开发第一年：收入、失败与复盘</span><time>2026-09</time></a>
+      </div>
+    </section>
+
+    <!-- 联系 -->
+    <section class="cta" id="contact">
+      <span class="badge"><span class="dot"></span>通常 24 小时内回复</span>
+      <h2 style="margin-top:20px">有想法？一起把它做出来</h2>
+      <p>App 外包、技术咨询，或者只是聊聊独立开发。</p>
+      <a class="btn" href="mailto:hello@example.com">发邮件给我 →</a>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 OukeDev</span>
+    <nav>
+      <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+      <a href="#">X / Twitter</a>
+      <a href="#">掘金</a>
+    </nav>
+  </footer>
+
+  <script>
+    /* ===== App 列表（首屏缩略图 + 下方作品详情 共用这一份数据） =====
+       新增 App 只需在这里加一项，顺序即展示顺序。
+       name     名称（必填）
+       color    主色：缩略图占位色、作品编号和背景光晕都用它
+       tagline  一句话标题（详情大标题）
+       desc     详细介绍，2–3 句
+       platform / tech / role  平台 / 技术 / 角色
+       store    主按钮 { label: 'Google Play', url: '...' }
+       pages    滚动叙事的分页：[{ title, desc, shot? }]，每页对应手机上的一屏；
+                不填 shot 时显示占位界面。建议 2–4 页
+       notes    可选，开发笔记链接
+       shot     可选，竖屏截图路径，如 'images/stickyword.png'（约 9:19）
+       icon     可选，App 图标路径；不填则显示名称首字母 */
+    const APPS = [
+      {
+        name: 'StickyWord', color: '#5b5bd6',
+        tagline: '锁屏上背单词，不用打开任何应用',
+        desc: '把生词做成锁屏与桌面小组件，抬手看一眼就是一次复习。词库、复习节奏和显示样式都能自己调。',
+        platform: 'Android', tech: 'Kotlin · Compose', role: '设计 + 开发',
+        store: { label: 'Google Play', url: '#' }, notes: '#',
+        pages: [
+          { title: '锁屏即复习', desc: '生词直接出现在锁屏小组件上，亮屏就能看到，不需要解锁和打开 App。' },
+          { title: '自己的词库', desc: '导入单词本或手动添加，按标签分组，想背哪一组就切到哪一组。' },
+          { title: '按记忆曲线安排复习', desc: '根据遗忘规律自动排出复习节奏，记住的少出现，记不住的多出现。' },
+        ],
+      },
+      {
+        name: 'LocalVault', color: '#0891b2',
+        tagline: '数据只留在手机里的私密笔记',
+        desc: '不联网、不注册、不上传。全部内容加密存在本机，导出与备份由用户自己掌握。',
+        platform: 'iOS', tech: 'Swift · SwiftUI', role: '设计 + 开发',
+        store: { label: 'App Store', url: '#' }, notes: '#',
+        pages: [
+          { title: '本机加密存储', desc: '所有笔记加密后只保存在手机上，没有服务器，也就没有泄露的可能。' },
+          { title: 'Face ID 解锁', desc: '打开即验证，切到后台自动上锁，别人拿到手机也看不到内容。' },
+          { title: '导出与备份自己掌握', desc: '一键导出加密备份文件，存到哪里、什么时候恢复，都由你决定。' },
+        ],
+      },
+      {
+        name: 'App 名称 C', color: '#111111',
+        tagline: '一句话说清它解决什么问题',
+        desc: '两三句话介绍核心功能、适合谁用，以及和同类 App 最不一样的地方。',
+        platform: 'Android · iOS', tech: 'KMP · Compose', role: '独立开发',
+        store: { label: '下载', url: '#' },
+        pages: [
+          { title: '功能一', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
+          { title: '功能二', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
+          { title: '功能三', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
+        ],
+      },
+      {
+        name: 'App 名称 D', color: '#f59e0b',
+        tagline: '一句话说清它解决什么问题',
+        desc: '两三句话介绍核心功能、适合谁用，以及和同类 App 最不一样的地方。',
+        platform: 'Android', tech: 'Kotlin · Compose', role: '独立开发',
+        store: { label: 'Google Play', url: '#' },
+        pages: [
+          { title: '功能一', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
+          { title: '功能二', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
+          { title: '功能三', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
+        ],
+      },
+      {
+        name: 'App 名称 E', color: '#8250df',
+        tagline: '一句话说清它解决什么问题',
+        desc: '两三句话介绍核心功能、适合谁用，以及和同类 App 最不一样的地方。',
+        platform: 'iOS', tech: 'Swift · SwiftUI', role: '独立开发',
+        store: { label: 'App Store', url: '#' },
+        pages: [
+          { title: '功能一', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
+          { title: '功能二', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
+          { title: '功能三', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
+        ],
+      },
+    ];
+
+    (function () {
+      const root = document.getElementById('apps');
+      const mobile = matchMedia('(max-width: 720px)');
+      const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+      const initialOf = app => esc(app.name.replace(/^App\s*名称\s*/, '').charAt(0) || app.name.charAt(0));
+      const iconOf = app => app.icon ? `<img src="${esc(app.icon)}" alt="">` : initialOf(app);
+      function screenOf(app) {
+        const c = esc(app.color || '#111');
+        const inner = app.shot
+          ? `<img src="${esc(app.shot)}" alt="${esc(app.name)} 截图" loading="lazy">`
+          : `<span class="ic" style="color:${c}">${iconOf(app)}</span><span class="bar"></span><span class="bar s"></span>`;
+        return `<div class="screen" style="background:linear-gradient(160deg,${c},${c}cc)">${inner}</div>`;
+      }
+
+      function card(app, i, style) {
+        return `<a class="app" href="#app-${i + 1}" style="--i:${i};${style}">
+          <div class="phone">${screenOf(app)}</div>
+          <span class="app-name">${esc(app.name)}</span></a>`;
+      }
+
+      // 分页屏幕：有截图用截图，否则按页序生成三种不同的占位界面
+      function pageScreen(app, p, k) {
+        if (p.shot) return `<div class="screen"><img src="${esc(p.shot)}" alt="${esc(app.name)} · ${esc(p.title || '')}" loading="lazy"></div>`;
+        const row = '<div class="ps-row"><b></b><i></i></div>';
+        const body = [
+          `<div class="ps-card hero"></div><div class="ps-card"></div><div class="ps-card"></div>`,
+          `<div class="ps-grid"><div class="ps-card"></div><div class="ps-card"></div><div class="ps-card"></div><div class="ps-card"></div></div><div class="ps-card"></div>`,
+          row.repeat(6),
+        ][k % 3];
+        return `<div class="screen ps"><div class="ps-title">${esc(p.title || '')}</div>${body}</div>`;
+      }
+
+      // 作品详情：每个 App 一段粘性滚动叙事，奇偶交替左右
+      function renderDetails() {
+        const host = document.getElementById('app-details');
+        host.innerHTML = APPS.map((a, i) => {
+          const no = String(i + 1).padStart(2, '0');
+          const pages = a.pages || [];
+          const total = pages.length;
+          const screens = [screenOf(a), ...pages.map((p, k) => pageScreen(a, p, k))];
+          const meta = [['平台', a.platform], ['技术', a.tech], ['角色', a.role]].filter(m => m[1]);
+          const intro = `<section class="step on">
+              <div class="feat-no rv" style="--d:0"><i>${iconOf(a)}</i>作品 ${no} · ${esc(a.name)}</div>
+              <h3 class="rv" style="--d:1">${esc(a.tagline || a.name)}</h3>
+              ${a.desc ? `<p class="feat-desc rv" style="--d:2">${esc(a.desc)}</p>` : ''}
+              ${meta.length ? `<dl class="feat-meta rv" style="--d:3">${meta.map(m => `<div><dt>${m[0]}</dt><dd>${esc(m[1])}</dd></div>`).join('')}</dl>` : ''}
+              <div class="feat-actions rv" style="--d:4">
+                ${a.store ? `<a class="btn" href="${esc(a.store.url || '#')}" target="_blank" rel="noopener">${esc(a.store.label || '下载')}</a>` : ''}
+                ${a.notes ? `<a class="btn-line" href="${esc(a.notes)}">开发笔记</a>` : ''}
+              </div>
+              ${total ? '' : `<div class="step-phone">${screens[0]}</div>`}
+            </section>`;
+          const steps = pages.map((p, k) => `<section class="step">
+              <div class="step-no">${String(k + 1).padStart(2, '0')} <span>/ ${String(total).padStart(2, '0')}</span></div>
+              <h4>${esc(p.title || '')}</h4>
+              ${p.desc ? `<p>${esc(p.desc)}</p>` : ''}
+              <div class="step-phone">${screens[k + 1]}</div>
+            </section>`).join('');
+          const dots = screens.length > 1
+            ? `<div class="dots">${screens.map((_, k) => `<button type="button" aria-label="第 ${k + 1} 屏"${k ? '' : ' class="on"'}></button>`).join('')}</div>` : '';
+          return `<article class="feature${i % 2 ? ' flip' : ''}" id="app-${i + 1}" style="--c:${esc(a.color || '#111')}">
+            <div class="story">
+              <div class="story-text">${intro}${total ? `<div class="steps-rail">${steps}</div>
+                <div class="rail-dots" aria-hidden="true">${pages.map((_, k) => `<i${k ? '' : ' class="on"'}></i>`).join('')}</div>` : ''}</div>
+              <div class="story-media"><div class="feat-media">
+                <div class="feat-phone" aria-hidden="true">${screens.map((sc, k) => `<div class="layer${k ? '' : ' on'}">${sc}</div>`).join('')}</div>
+                ${dots}
+              </div></div>
+            </div>
+          </article>`;
+        }).join('');
+
+        if (!('IntersectionObserver' in window)) return;
+        document.documentElement.classList.add('js');
+
+        // 介绍段进场动画
+        const reveal = new IntersectionObserver(entries => entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('in'); reveal.unobserve(e.target); }
+        }), { threshold: 0.15 });
+
+        host.querySelectorAll('.feature').forEach(feature => {
+          reveal.observe(feature);
+          const steps = [...feature.querySelectorAll('.step')];
+          const layers = [...feature.querySelectorAll('.layer')];
+          const dots = [...feature.querySelectorAll('.dots button')];
+          const activate = k => [steps, layers, dots].forEach(list => list.forEach((el, j) => el.classList.toggle('on', j === k)));
+          // 以视口中线为判定线：哪一段越过中线，手机就切到哪一屏
+          const io = new IntersectionObserver(entries => entries.forEach(e => {
+            if (e.isIntersecting) activate(steps.indexOf(e.target));
+          }), { rootMargin: '-50% 0px -50% 0px' });
+          steps.forEach(st => io.observe(st));
+          dots.forEach((d, k) => d.addEventListener('click', () => steps[k].scrollIntoView({ behavior: 'smooth', block: 'center' })));
+
+          // 手机端横向滑动：按滚动位置更新下方指示点
+          const rail = feature.querySelector('.steps-rail');
+          const railDots = [...feature.querySelectorAll('.rail-dots i')];
+          if (rail && railDots.length) {
+            let ticking = false;
+            rail.addEventListener('scroll', () => {
+              if (ticking) return; ticking = true;
+              requestAnimationFrame(() => {
+                const cards = [...rail.children];
+                const mid = rail.scrollLeft + rail.clientWidth / 2;
+                let k = 0, best = Infinity;
+                cards.forEach((c, j) => { const d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid); if (d < best) { best = d; k = j; } });
+                railDots.forEach((el, j) => el.classList.toggle('on', j === k));
+                ticking = false;
+              });
+            }, { passive: true });
+          }
+        });
+      }
+
+      // 首屏缩略图：少量时扇形排列，超过上限自动无限滚动
+      function render() {
+        const max = mobile.matches ? 3 : 5;
+        const n = APPS.length;
+        if (n <= max) {
+          // 扇形：以中间为轴对称，越靠边越倾斜、越低；中间一张放大
+          const mid = (n - 1) / 2;
+          root.className = 'apps fan';
+          root.innerHTML = `<div class="apps-track">${APPS.map((a, i) => {
+            const d = i - mid;
+            if (mobile.matches) return card(a, i, '');
+            const big = n % 2 === 1 && d === 0 ? '--w:172px;' : '';
+            return card(a, i, `--r:${d * 3}deg;--y:${Math.abs(d) * Math.abs(d) * 4 + Math.abs(d) * 4}px;${big}`);
+          }).join('')}</div>`;
+        } else {
+          // 无限滚动：列表复制一份首尾相接；速度随数量线性增加，保持匀速观感
+          root.className = 'apps marquee';
+          const items = APPS.map((a, i) => card(a, i, `--r:${i % 2 ? 2 : -2}deg`)).join('');
+          const clone = items.replace(/<a class="app"/g, '<a class="app" aria-hidden="true" tabindex="-1"');
+          root.innerHTML = `<div class="apps-track" style="--dur:${n * 5}s">${items}${clone}</div>`;
+        }
+      }
+
+      render();
+      renderDetails();
+      mobile.addEventListener('change', render);
+    })();
+  </script>
+</body>
+</html>
