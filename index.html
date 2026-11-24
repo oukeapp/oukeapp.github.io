@@ -111,9 +111,9 @@
     .win pre { padding: 6px 18px 18px; white-space: pre; font: inherit; }
 
     /* 代码编辑器（右上，部分出屏） */
-    .deco-editor { right: -70px; top: 70px; width: 360px; background: #1e1f22; color: #bcbec4; transform: rotate(9deg); }
-    .deco-editor .win-bar { background: #2b2d30; }
-    .kw { color: #cf8e6d; } .an { color: #b3ae60; } .fn { color: #56a8f5; } .st { color: #6aab73; } .cm { color: #7a7e85; font-style: italic; } .nu { color: #2aacb8; }
+    .deco-editor { right: -70px; top: 70px; width: 360px; background: #fff; color: #333; border: 1px solid var(--line); transform: rotate(9deg); box-shadow: 0 24px 48px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.04); }
+    .deco-editor .win-bar { background: #f7f7f6; border-bottom: 1px solid var(--line); }
+    .kw { color: #c2410c; } .an { color: #a16207; } .fn { color: var(--accent); } .st { color: var(--green); } .cm { color: #aaa; font-style: italic; } .nu { color: #7c3aed; }
 
     /* 终端（左中） */
     .deco-term { left: -70px; top: 540px; width: 300px; background: #fbfbfa; color: #333; border: 1px solid var(--line); transform: rotate(7deg); }
@@ -425,7 +425,6 @@
       <span class="badge"><span class="dot"></span>接受合作中</span>
       <h1>做人们每天打开的 App</h1>
       <p class="lead">独立开发者 · Kotlin Multiplatform</p>
-      <a class="btn" href="#work">看看作品 →</a>
 
       <!-- App 缩略图：由底部脚本按 APPS 数据渲染 -->
       <div class="apps" id="apps" aria-label="我的 App"></div>
@@ -532,15 +531,17 @@
         ],
       },
       {
-        name: 'App 名称 C', color: '#111111',
-        tagline: '一句话说清它解决什么问题',
-        desc: '两三句话介绍核心功能、适合谁用，以及和同类 App 最不一样的地方。',
-        platform: 'Android · iOS', tech: 'KMP · Compose', role: '独立开发',
-        store: { label: '下载', url: '#' },
+        name: 'Jump Box', color: '#ff6b4a', icon: 'images/jumpbox/icon.png',
+        shot: 'images/jumpbox/01-cover.webp',
+        tagline: '按住蓄力，松开就跳',
+        desc: '一根手指就能玩的跳跃小游戏。瞄准下一个方块的正中心，从书桌一路跳到月球。',
+        platform: 'iOS · Android', tech: 'Kotlin Multiplatform · Compose', role: '设计 + 开发',
+        store: { label: 'Google Play', url: 'https://play.google.com/store/apps/details?id=jp.co.oukeapp.jump' },
         pages: [
-          { title: '功能一', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
-          { title: '功能二', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
-          { title: '功能三', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
+          { title: '一根手指就能玩', desc: '按得越久跳得越远，落在正中心就是完美；连续完美触发 FEVER，得分翻倍。', shot: 'images/jumpbox/03-charge.webp' },
+          { title: '6 章 30 个世界', desc: '从白纸桌面到东京、珊瑚礁、蛋糕山、恐龙时代，每个世界都有自己的地面和专属方块。', shot: 'images/jumpbox/05-world-tokyo.webp' },
+          { title: '一百多种方块', desc: '能把你弹得更远的小鼓、开出道具的礼物盒……每种方块都能在图鉴里查到。', shot: 'images/jumpbox/06-blocks.webp' },
+          { title: '六个角色，自由装扮', desc: '挑一个喜欢的角色，戴上皇冠或厨师帽。', shot: 'images/jumpbox/08-heroes.webp' },
         ],
       },
       {
