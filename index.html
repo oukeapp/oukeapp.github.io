@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="ja">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>OukeDev · 独立开发者</title>
-  <meta name="description" content="独立开发者，用 Kotlin Multiplatform 与 Compose 打造跨平台 App。" />
+  <title>OukeApp · 個人開発者</title>
+  <meta name="description" content="Kotlin Multiplatform と Compose でクロスプラットフォームのアプリを作る個人開発者です。" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -21,7 +21,7 @@
       --green: #2f9e44;
       --radius: 999px;
       --shadow: 0 1px 2px rgba(0,0,0,.04), 0 12px 40px rgba(0,0,0,.06);
-      --font: "Inter", -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --font: "Inter", -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif;
       --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -211,8 +211,25 @@
     .feat-meta dt { font-size: 13px; color: var(--ink-3); margin-bottom: 6px; }
     .feat-meta dd { font-size: 16px; font-weight: 600; }
     .feat-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+    /* 商店下载按钮：App Store / Google Play 徽章样式 */
+    .store-btn {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: #111214; color: #fff; border-radius: 14px;
+      padding: 9px 22px 9px 16px; min-width: 168px;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .store-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+    .store-btn svg { width: 28px; height: 28px; flex: none; }
+    .store-btn .txt { display: flex; flex-direction: column; line-height: 1.1; }
+    .store-btn small { font-size: 11px; color: rgba(255,255,255,.62); letter-spacing: .01em; }
+    .store-btn b { font-size: 19px; font-weight: 600; letter-spacing: -.01em; }
     .btn-line { display: inline-flex; align-items: center; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 12px 22px; font-size: 15px; font-weight: 500; transition: border-color .15s; }
     .btn-line:hover { border-color: var(--ink-3); }
+    .btn-line.soon { color: var(--ink-2); border-style: dashed; cursor: default; }
+    .btn-line.soon:hover { border-color: var(--line); }
+    /* 状态标签（如「開発中」） */
+    .status-tag { font-style: normal; font-family: var(--font); font-size: 11px; font-weight: 600; letter-spacing: 0; text-transform: none; line-height: 1; padding: 4px 8px; border-radius: 999px; color: var(--c, var(--ink-2)); background: color-mix(in srgb, var(--c, #888) 14%, transparent); vertical-align: middle; }
+    .feat-no .status-tag { margin-left: 4px; }
     .step-no { font-family: var(--mono); font-size: 13px; color: var(--c); }
     .step-no span { color: var(--ink-3); }
     .step h4 { font-size: clamp(24px, 2.6vw, 34px); line-height: 1.2; letter-spacing: -.03em; margin-top: 12px; }
@@ -343,16 +360,16 @@
 
   <div class="nav-wrap">
     <header class="nav">
-      <a class="logo" href="#"><span class="logo-mark">&lt;/&gt;</span>OukeDev</a>
+      <a class="logo" href="#"><span class="logo-mark">&lt;/&gt;</span>OukeApp</a>
       <nav class="nav-links">
         <a href="#work">作品</a>
-        <a href="#about">关于</a>
-        <a href="#writing">文章</a>
-        <a href="#contact">联系</a>
+        <a href="#about">プロフィール</a>
+        <a href="#writing">記事</a>
+        <a href="#contact">お問い合わせ</a>
       </nav>
       <div class="nav-right">
         <a class="btn-ghost" href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
-        <a class="btn" href="#contact">合作联系</a>
+        <a class="btn" href="#contact">お仕事のご相談</a>
       </div>
     </header>
   </div>
@@ -422,12 +439,12 @@
         Merged #128 <small>+342 −87</small>
       </div>
 
-      <span class="badge"><span class="dot"></span>接受合作中</span>
-      <h1>做人们每天打开的 App</h1>
-      <p class="lead">独立开发者 · Kotlin Multiplatform</p>
+      <span class="badge"><span class="dot"></span>お仕事受付中</span>
+      <h1 style="word-break:keep-all">毎日ひらきたくなる<wbr>アプリを</h1>
+      <p class="lead">個人開発者 · Kotlin Multiplatform</p>
 
       <!-- App 缩略图：由底部脚本按 APPS 数据渲染 -->
-      <div class="apps" id="apps" aria-label="我的 App"></div>
+      <div class="apps" id="apps" aria-label="アプリ一覧"></div>
     </section>
 
     <!-- 作品：由底部脚本按 APPS 数据渲染 -->
@@ -435,55 +452,55 @@
       <div class="work-head">
         <div>
           <div class="eyebrow">// 01 · 作品</div>
-          <h2>做过的 App</h2>
+          <h2>これまでに作ったアプリ</h2>
         </div>
-        <p>每一个都从自己的需求出发，独立完成设计、开发到上架。</p>
+        <p>どれも自分が欲しいものから出発し、デザインから開発、リリースまで一人で手がけています。</p>
       </div>
       <div id="app-details"></div>
     </section>
 
     <!-- 关于 -->
     <section class="block" id="about">
-      <div class="eyebrow">// 02 · 关于</div>
-      <h2>你好，我是 OukeDev</h2>
+      <div class="eyebrow">// 02 · プロフィール</div>
+      <h2>はじめまして、OukeApp です</h2>
       <div class="split">
         <div class="about">
-          <p>我专注于移动端产品，喜欢把一个模糊的想法打磨成能上架、能赚钱、用户愿意留下来的 App。</p>
-          <p>比起堆功能，我更在意细节：启动速度、手势手感、付费流程是否顺滑，以及上架审核能否一次通过。</p>
-          <p>这里记录我做过的东西、踩过的坑，以及一些正在进行的实验。</p>
+          <p>モバイルアプリを専門に、ぼんやりしたアイデアを「ストアに出せて、収益になり、使い続けてもらえる」アプリへ磨き上げるのが好きです。</p>
+          <p>機能を積み上げるより、細部を大切にしています。起動の速さ、ジェスチャーの手触り、課金フローのなめらかさ、そして審査に一度で通ること。</p>
+          <p>ここでは、作ってきたもの、ハマったポイント、進行中の実験などを記録しています。</p>
         </div>
         <div class="stack-list">
-          <div><span>语言</span><span>Kotlin · Swift</span></div>
+          <div><span>言語</span><span>Kotlin · Swift</span></div>
           <div><span>UI</span><span>Compose Multiplatform</span></div>
-          <div><span>架构</span><span>KMP · MVI</span></div>
-          <div><span>变现</span><span>RevenueCat · IAP</span></div>
-          <div><span>工具</span><span>Android Studio · Xcode</span></div>
+          <div><span>設計</span><span>KMP · MVI</span></div>
+          <div><span>収益化</span><span>RevenueCat · IAP</span></div>
+          <div><span>ツール</span><span>Android Studio · Xcode</span></div>
         </div>
       </div>
     </section>
 
     <!-- 文章 -->
     <section class="block" id="writing">
-      <div class="eyebrow">// 03 · 文章</div>
-      <h2>最近在写</h2>
+      <div class="eyebrow">// 03 · 記事</div>
+      <h2>最近の記事</h2>
       <div class="writing">
-        <a href="#"><span class="t">用 KMP 一套代码接入 Android 与 iOS 内购</span><time>2026-11</time></a>
-        <a href="#"><span class="t">Compose Multiplatform 在 iOS 上的性能调优笔记</span><time>2026-10</time></a>
-        <a href="#"><span class="t">独立开发第一年：收入、失败与复盘</span><time>2026-09</time></a>
+        <a href="#"><span class="t">KMP の共通コードで Android と iOS のアプリ内課金を実装する</span><time>2026-11</time></a>
+        <a href="#"><span class="t">Compose Multiplatform の iOS パフォーマンス改善メモ</span><time>2026-10</time></a>
+        <a href="#"><span class="t">個人開発 1 年目：収入・失敗・ふりかえり</span><time>2026-09</time></a>
       </div>
     </section>
 
     <!-- 联系 -->
     <section class="cta" id="contact">
-      <span class="badge"><span class="dot"></span>通常 24 小时内回复</span>
-      <h2 style="margin-top:20px">有想法？一起把它做出来</h2>
-      <p>App 外包、技术咨询，或者只是聊聊独立开发。</p>
-      <a class="btn" href="mailto:hello@example.com">发邮件给我 →</a>
+      <span class="badge"><span class="dot"></span>通常 24 時間以内に返信します</span>
+      <h2 style="margin-top:20px">アイデアがあれば、一緒にカタチにしましょう</h2>
+      <p>アプリ開発のご依頼、技術相談、個人開発の雑談でもお気軽にどうぞ。</p>
+      <a class="btn" href="mailto:hello@example.com">メールで連絡する →</a>
     </section>
   </main>
 
   <footer>
-    <span>© 2026 OukeDev</span>
+    <span>© 2026 OukeApp</span>
     <nav>
       <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
       <a href="#">X / Twitter</a>
@@ -500,72 +517,80 @@
        desc     详细介绍，2–3 句
        platform / tech / role  平台 / 技术 / 角色
        store    主按钮 { label: 'Google Play', url: '...' }
+       store2   可选，第二个商店按钮（线框样式），格式同 store
        pages    滚动叙事的分页：[{ title, desc, shot? }]，每页对应手机上的一屏；
                 不填 shot 时显示占位界面。建议 2–4 页
        notes    可选，开发笔记链接
        shot     可选，竖屏截图路径，如 'images/stickyword.png'（约 9:19）
-       icon     可选，App 图标路径；不填则显示名称首字母 */
+       icon     可选，App 图标路径；不填则显示名称首字母
+       status   可选，如 '開発中'：名称旁显示状态标签，并以「近日公開」代替商店按钮 */
     const APPS = [
       {
-        name: 'StickyWord', color: '#5b5bd6',
-        tagline: '锁屏上背单词，不用打开任何应用',
-        desc: '把生词做成锁屏与桌面小组件，抬手看一眼就是一次复习。词库、复习节奏和显示样式都能自己调。',
-        platform: 'Android', tech: 'Kotlin · Compose', role: '设计 + 开发',
-        store: { label: 'Google Play', url: '#' }, notes: '#',
+        name: 'StickyWord', color: '#b7791f', icon: 'images/stickyword/icon.png',
+        shot: 'images/stickyword/00-cover.webp',
+        tagline: '毎朝、デスクに新しい単語が貼ってある',
+        desc: '日本語の単語を一枚ずつ付箋にしてデスクに貼るアプリ。1 日 10 枚だけ届き、気に入った単語はバインダーへ。忘れかけたころに自分から戻ってきます。完全オフライン・登録不要・広告なし。',
+        platform: 'iOS · Android', tech: 'Kotlin Multiplatform · Compose', role: 'デザイン + 開発',
+        store: { label: 'App Store', url: 'https://apps.apple.com/us/app/stickyword-japanese-jlpt/id6804211430' },
+        store2: { label: 'Google Play', url: 'https://play.google.com/store/apps/details?id=jp.co.oukeapp.stickyword' },
         pages: [
-          { title: '锁屏即复习', desc: '生词直接出现在锁屏小组件上，亮屏就能看到，不需要解锁和打开 App。' },
-          { title: '自己的词库', desc: '导入单词本或手动添加，按标签分组，想背哪一组就切到哪一组。' },
-          { title: '按记忆曲线安排复习', desc: '根据遗忘规律自动排出复习节奏，记住的少出现，记不住的多出现。' },
+          { title: '今日の分は、デスクの上に', desc: '読み・品詞・意味・例文を付箋 1 枚にまとめたので、長いリストをスクロールする必要はありません。覚えた単語はワンタップで消し、残りは一日の終わりに自動で復習へ回ります。', shot: 'images/stickyword/01-today.webp' },
+          { title: '7 冊の単語帳を自由に切り替え', desc: 'JLPT N1〜N5、日常会話、ビジネスの計約 9,000 語。意味は中国語・英語・韓国語・ベトナム語から選べます。', shot: 'images/stickyword/02-books.webp' },
+          { title: '気になる単語は、貼って残す', desc: 'しおりをタップするとバインダーに保存。よく見る単語は上部にピン留めでき、それ以外は月ごとに整理。五十音順の並べ替えや 4 言語横断の検索にも対応しています。', shot: 'images/stickyword/03-saved.webp' },
+          { title: '忘れかけたころに、戻ってくる', desc: 'カードをめくって、思い出せたら右へ、自信がなければ左へスワイプ。しっかり覚えた単語ほど次に出会うのは先に（1 日〜6 か月）、覚えきれていない単語は早めに戻ってきます。', shot: 'images/stickyword/04-review.webp' },
         ],
       },
       {
-        name: 'LocalVault', color: '#0891b2',
-        tagline: '数据只留在手机里的私密笔记',
-        desc: '不联网、不注册、不上传。全部内容加密存在本机，导出与备份由用户自己掌握。',
-        platform: 'iOS', tech: 'Swift · SwiftUI', role: '设计 + 开发',
-        store: { label: 'App Store', url: '#' }, notes: '#',
+        name: 'LocalVault', color: '#0891b2', icon: 'images/localvault/icon.png',
+        shot: 'images/localvault/00-cover.webp',
+        tagline: '自分のスマホの中だけにある、プライベートな金庫',
+        desc: 'メモ、ID とパスワード、写真、リンクをコレクションごとにすりガラスのフォルダへ。すべての内容は端末内で AES-256 暗号化され、アカウント登録もクラウドへのアップロードもありません。',
+        platform: 'iOS · Android', tech: 'Kotlin Multiplatform · Compose', role: 'デザイン + 開発',
+        store: { label: 'Google Play', url: 'https://play.google.com/store/apps/details?id=jp.co.oukeapp.localvault' },
         pages: [
-          { title: '本机加密存储', desc: '所有笔记加密后只保存在手机上，没有服务器，也就没有泄露的可能。' },
-          { title: 'Face ID 解锁', desc: '打开即验证，切到后台自动上锁，别人拿到手机也看不到内容。' },
-          { title: '导出与备份自己掌握', desc: '一键导出加密备份文件，存到哪里、什么时候恢复，都由你决定。' },
+          { title: '4 種類の大切な情報を、ひとつの場所に', desc: 'メモ・アカウント・画像・リンクにはそれぞれ色があり、ホームで色をタップするだけで新規作成。メニューを探す必要はありません。', shot: 'images/localvault/01-types.webp' },
+          { title: 'ID とパスワードがすぐ見つかる', desc: 'ログイン ID とパスワードを分けて表示し、横のボタンでワンタップコピー。銀行やクレジットカードのアカウントは専用のコレクションにまとめられます。', shot: 'images/localvault/02-accounts.webp' },
+          { title: 'コレクションで整理、混ぜて入れても OK', desc: 'ひとつのコレクションにメモとアカウントを一緒に入れられます。たとえば「仕事」に議事録と社内システムのログイン情報をまとめて。', shot: 'images/localvault/03-collection.webp' },
+          { title: 'あなただけが知っているパスコード', desc: '6 桁のパスコードでロックし、初回解除後は指紋認証や Face ID も使えます。データは端末内に暗号化して保存。アカウントもクラウドもありません。', shot: 'images/localvault/04-security.webp' },
         ],
       },
       {
         name: 'Jump Box', color: '#ff6b4a', icon: 'images/jumpbox/icon.png',
         shot: 'images/jumpbox/01-cover.webp',
-        tagline: '按住蓄力，松开就跳',
-        desc: '一根手指就能玩的跳跃小游戏。瞄准下一个方块的正中心，从书桌一路跳到月球。',
-        platform: 'iOS · Android', tech: 'Kotlin Multiplatform · Compose', role: '设计 + 开发',
+        tagline: '長押しでためて、離してジャンプ',
+        desc: '指 1 本で遊べるジャンプゲーム。次のブロックのど真ん中を狙って、机の上から月まで跳んでいこう。',
+        platform: 'iOS · Android', tech: 'Kotlin Multiplatform · Compose', role: 'デザイン + 開発',
         store: { label: 'Google Play', url: 'https://play.google.com/store/apps/details?id=jp.co.oukeapp.jump' },
         pages: [
-          { title: '一根手指就能玩', desc: '按得越久跳得越远，落在正中心就是完美；连续完美触发 FEVER，得分翻倍。', shot: 'images/jumpbox/03-charge.webp' },
-          { title: '6 章 30 个世界', desc: '从白纸桌面到东京、珊瑚礁、蛋糕山、恐龙时代，每个世界都有自己的地面和专属方块。', shot: 'images/jumpbox/05-world-tokyo.webp' },
-          { title: '一百多种方块', desc: '能把你弹得更远的小鼓、开出道具的礼物盒……每种方块都能在图鉴里查到。', shot: 'images/jumpbox/06-blocks.webp' },
-          { title: '六个角色，自由装扮', desc: '挑一个喜欢的角色，戴上皇冠或厨师帽。', shot: 'images/jumpbox/08-heroes.webp' },
+          { title: '指 1 本で遊べる', desc: '長く押すほど遠くへ跳び、ど真ん中に着地すればパーフェクト。パーフェクトを続けると FEVER が発動し、スコアが 2 倍に。', shot: 'images/jumpbox/03-charge.webp' },
+          { title: '6 章・30 のワールド', desc: '白い紙のデスクから東京、サンゴ礁、ケーキの山、恐竜時代まで。ワールドごとに地面と専用ブロックが用意されています。', shot: 'images/jumpbox/05-world-tokyo.webp' },
+          { title: '100 種類以上のブロック', desc: 'もっと遠くへ弾ませてくれる太鼓、アイテムが出てくるプレゼント箱……どのブロックも図鑑で確認できます。', shot: 'images/jumpbox/06-blocks.webp' },
+          { title: '6 人のキャラクター、着せ替え自由', desc: 'お気に入りのキャラクターを選んで、王冠やコック帽をかぶせよう。', shot: 'images/jumpbox/08-heroes.webp' },
         ],
       },
       {
-        name: 'App 名称 D', color: '#f59e0b',
-        tagline: '一句话说清它解决什么问题',
-        desc: '两三句话介绍核心功能、适合谁用，以及和同类 App 最不一样的地方。',
-        platform: 'Android', tech: 'Kotlin · Compose', role: '独立开发',
-        store: { label: 'Google Play', url: '#' },
-        pages: [
-          { title: '功能一', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
-          { title: '功能二', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
-          { title: '功能三', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
+        name: '免許模擬試験', color: '#16a37f', icon: 'images/drivelicense/icon.png',
+        shot: 'images/drivelicense/01-home.webp',
+        tagline: '運転免許の学科試験対策を、スマホひとつで',
+        desc: '仮免・本免の両方に対応した学科の模擬試験アプリ。問題数・制限時間・採点方法は本番と同じなので、すき間時間にくり返し練習できます。登録不要ですぐ使えます。',
+        platform: 'iOS · Android', tech: 'Kotlin Multiplatform · Compose', role: 'デザイン + 開発',
+        store: { label: 'App Store', url: 'https://apps.apple.com/us/app/%E5%85%8D%E8%A8%B1%E6%A8%A1%E6%93%AC%E8%A9%A6%E9%A8%93/id6741705706' },        pages: [
+          { title: '本番と同じペースで', desc: '仮免は 30 分 50 問、本免は 50 分 95 問。○ か × をタップして解答します。本番形式の問題集 10 回分、イラスト問題を含む全 725 問を収録。', shot: 'images/drivelicense/02-quiz.webp' },
+          { title: '間違えた問題は解説つきで自動保存', desc: '90 点以上で合格。採点後、間違えた問題は解説と一緒に「間違えた問題」へまとめられ、苦手なところだけを練習できます。', shot: 'images/drivelicense/03-explain.webp' },
+          { title: '113 種類の標識を 5 つの分類で', desc: '警戒・規制・指示の標識と標示がひと目でわかります。ホームには毎日「今日の標識」が表示されるので、自然に覚えられます。', shot: 'images/drivelicense/04-signs.webp' },
+          { title: '学科教習 27 項目', desc: '第 1 段階 14 項目、第 2 段階 13 項目。教習所の進み具合に合わせて練習内容を切り替えられます。', shot: 'images/drivelicense/05-lessons.webp' },
         ],
       },
       {
-        name: 'App 名称 E', color: '#8250df',
-        tagline: '一句话说清它解决什么问题',
-        desc: '两三句话介绍核心功能、适合谁用，以及和同类 App 最不一样的地方。',
-        platform: 'iOS', tech: 'Swift · SwiftUI', role: '独立开发',
-        store: { label: 'App Store', url: '#' },
+        name: 'Article', color: '#9a8414', status: '開発中',
+        tagline: '日本語の文章を、ふりがなと訳つきで読む',
+        desc: 'エッセイや日常の短い文章を、ふりがな・対訳つきで読める日本語リーディングアプリ。気になる単語はタップで意味を確認して単語帳へ。読んだ文脈ごと復習できます。現在開発中です。',
+        platform: 'iOS · Android', tech: 'Kotlin Multiplatform · Compose', role: 'デザイン + 開発',
         pages: [
-          { title: '功能一', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
-          { title: '功能二', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
-          { title: '功能三', desc: '用一两句话说明这一屏展示的功能，以及它为用户解决了什么。' },
+          { title: 'レベル別の読みもの', desc: 'N5 の「朝ごはん」から N1 の語彙を含むエッセイまで。JLPT レベルと読了時間の目安つきで、今の自分に合う文章を選べます。' },
+          { title: 'ふりがなと対訳を、一文ずつ', desc: 'ふりがなの表示はワンタップで切り替え。訳は中国語・英語から選べ、原文と訳の対応する語がハイライトされます。' },
+          { title: 'タップで辞書、そのまま単語帳へ', desc: '点線のついた単語をタップすると、読み・品詞・意味・例文を表示。保存した単語は出てきた文章と一緒に単語帳に残ります。' },
+          { title: '文脈ごと思い出す復習', desc: '単語だけでなく、出会った一文を見ながら読みと意味を思い出します。覚え具合に合わせて、復習のタイミングを調整します。' },
         ],
       },
     ];
@@ -575,12 +600,12 @@
       const mobile = matchMedia('(max-width: 720px)');
       const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-      const initialOf = app => esc(app.name.replace(/^App\s*名称\s*/, '').charAt(0) || app.name.charAt(0));
+      const initialOf = app => esc(app.name.replace(/^(App\s*名称|アプリ名)\s*/, '').charAt(0) || app.name.charAt(0));
       const iconOf = app => app.icon ? `<img src="${esc(app.icon)}" alt="">` : initialOf(app);
       function screenOf(app) {
         const c = esc(app.color || '#111');
         const inner = app.shot
-          ? `<img src="${esc(app.shot)}" alt="${esc(app.name)} 截图" loading="lazy">`
+          ? `<img src="${esc(app.shot)}" alt="${esc(app.name)} のスクリーンショット" loading="lazy">`
           : `<span class="ic" style="color:${c}">${iconOf(app)}</span><span class="bar"></span><span class="bar s"></span>`;
         return `<div class="screen" style="background:linear-gradient(160deg,${c},${c}cc)">${inner}</div>`;
       }
@@ -588,7 +613,7 @@
       function card(app, i, style) {
         return `<a class="app" href="#app-${i + 1}" style="--i:${i};${style}">
           <div class="phone">${screenOf(app)}</div>
-          <span class="app-name">${esc(app.name)}</span></a>`;
+          <span class="app-name">${esc(app.name)}${app.status ? ` <em class="status-tag">${esc(app.status)}</em>` : ''}</span></a>`;
       }
 
       // 分页屏幕：有截图用截图，否则按页序生成三种不同的占位界面
@@ -605,21 +630,39 @@
 
       // 作品详情：每个 App 一段粘性滚动叙事，奇偶交替左右
       function renderDetails() {
+        // 商店按钮：label 含 App Store / Google Play 时用对应徽章，其他商店退回普通按钮
+        const STORE_BADGES = {
+          apple: { top: 'Download on the', name: 'App Store',
+            icon: '<svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.47.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.27-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.66ZM14.1 5.85c.63-.77 1.06-1.83.94-2.89-.91.04-2.01.61-2.66 1.37-.58.67-1.09 1.76-.96 2.8 1.02.08 2.05-.51 2.68-1.28Z"/></svg>' },
+          google: { top: 'GET IT ON', name: 'Google Play',
+            icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.2 2.4 13.6 12l-9.4 9.6c-.3-.2-.5-.6-.5-1.1V3.5c0-.5.2-.9.5-1.1Z" fill="#fff"/><path d="m16.9 8.7-3.3 3.3-9.4-9.6c.3-.2.8-.2 1.3.1l11.4 6.2Z" fill="#e6e6e6"/><path d="M16.9 15.3 5.5 21.5c-.5.3-1 .3-1.3.1l9.4-9.6 3.3 3.3Z" fill="#9a9a9a"/><path d="m20.4 13.2-3.5 2.1-3.3-3.3 3.3-3.3 3.5 2.1c.9.5.9 1.9 0 2.4Z" fill="#cfcfcf"/></svg>' },
+        };
+        const storeBtn = s => {
+          if (!s) return '';
+          const url = esc(s.url || '#');
+          const label = s.label || 'ダウンロード';
+          const kind = /app\s*store|apple/i.test(label) ? 'apple' : /google\s*play/i.test(label) ? 'google' : null;
+          if (!kind) return `<a class="btn" href="${url}" target="_blank" rel="noopener">${esc(label)}</a>`;
+          const b = STORE_BADGES[kind];
+          return `<a class="store-btn" href="${url}" target="_blank" rel="noopener" aria-label="${b.top} ${b.name}">${b.icon}<span class="txt"><small>${b.top}</small><b>${b.name}</b></span></a>`;
+        };
         const host = document.getElementById('app-details');
         host.innerHTML = APPS.map((a, i) => {
           const no = String(i + 1).padStart(2, '0');
           const pages = a.pages || [];
           const total = pages.length;
           const screens = [screenOf(a), ...pages.map((p, k) => pageScreen(a, p, k))];
-          const meta = [['平台', a.platform], ['技术', a.tech], ['角色', a.role]].filter(m => m[1]);
+          const meta = [['対応 OS', a.platform], ['技術', a.tech], ['担当', a.role]].filter(m => m[1]);
           const intro = `<section class="step on">
-              <div class="feat-no rv" style="--d:0"><i>${iconOf(a)}</i>作品 ${no} · ${esc(a.name)}</div>
+              <div class="feat-no rv" style="--d:0"><i>${iconOf(a)}</i>作品 ${no} · ${esc(a.name)}${a.status ? `<em class="status-tag">${esc(a.status)}</em>` : ''}</div>
               <h3 class="rv" style="--d:1">${esc(a.tagline || a.name)}</h3>
               ${a.desc ? `<p class="feat-desc rv" style="--d:2">${esc(a.desc)}</p>` : ''}
               ${meta.length ? `<dl class="feat-meta rv" style="--d:3">${meta.map(m => `<div><dt>${m[0]}</dt><dd>${esc(m[1])}</dd></div>`).join('')}</dl>` : ''}
               <div class="feat-actions rv" style="--d:4">
-                ${a.store ? `<a class="btn" href="${esc(a.store.url || '#')}" target="_blank" rel="noopener">${esc(a.store.label || '下载')}</a>` : ''}
-                ${a.notes ? `<a class="btn-line" href="${esc(a.notes)}">开发笔记</a>` : ''}
+                ${a.status && !a.store ? `<span class="btn-line soon">${esc(a.status)} · 近日公開</span>` : ''}
+                ${storeBtn(a.store)}
+                ${storeBtn(a.store2)}
+                ${a.notes ? `<a class="btn-line" href="${esc(a.notes)}">開発メモ</a>` : ''}
               </div>
               ${total ? '' : `<div class="step-phone">${screens[0]}</div>`}
             </section>`;
@@ -630,7 +673,7 @@
               <div class="step-phone">${screens[k + 1]}</div>
             </section>`).join('');
           const dots = screens.length > 1
-            ? `<div class="dots">${screens.map((_, k) => `<button type="button" aria-label="第 ${k + 1} 屏"${k ? '' : ' class="on"'}></button>`).join('')}</div>` : '';
+            ? `<div class="dots">${screens.map((_, k) => `<button type="button" aria-label="${k + 1} 画面目"${k ? '' : ' class="on"'}></button>`).join('')}</div>` : '';
           return `<article class="feature${i % 2 ? ' flip' : ''}" id="app-${i + 1}" style="--c:${esc(a.color || '#111')}">
             <div class="story">
               <div class="story-text">${intro}${total ? `<div class="steps-rail">${steps}</div>
